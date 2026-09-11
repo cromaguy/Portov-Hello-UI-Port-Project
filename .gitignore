@@ -1,0 +1,21 @@
+# Build output & large images (DO NOT COMMIT RAW IMAGES TO GITHUB!)
+*.img
+*.raw
+*.bin
+*.zip
+*.sparsechunk*
+temp_*/
+port_workspace/
+port_package/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+
+# OS specific
+Thumbs.db
+Desktop.ini
+.DS_Store

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<permissions>
+    <privapp-permissions package="com.motorola.aicore" >
+        <permission name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
+        <permission name="android.permission.START_FOREGROUND_SERVICES_FROM_BACKGROUND" />
+    </privapp-permissions>
+</permissions>
