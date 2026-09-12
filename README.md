@@ -80,9 +80,9 @@ python scripts/make_blur_addon_zip.py
 
 | Package Name | Target Interface | File Size | Download Link |
 | :--- | :--- | :--- | :--- |
-| **Port Package (Fastboot)** | PC / Fastboot & FastbootD | ~5.7 GB | [Google Drive](https://drive.google.com/file/d/1i6MvSgaoAqQNo3DilyvF5gp3e4DmTPqi/view?usp=sharing) |
+| **Port Package (Fastboot)** | PC / Fastboot & FastbootD | ~5.7 GB | [Pixeldrain](https://pixeldrain.com/u/3tD6dd9Z) |
 | **SELinux Permissive Flasher** | PC / Fastboot (`flash_permissive_boot`) | 96 MB | Included in Port Package (`boot_permissive.img`) |
-| **Window-Level Native Blurs Add-on** | ADB / PC (Windows & Linux) | ~5.2 KB | Included in repository (`addons/window_blurs`) |
+| **Window-Level Native Blurs Add-on** | ADB / PC (Windows & Linux) | ~4.2 KB | [Pixeldrain](https://pixeldrain.com/u/uCDVaVy8) |
 
 ---
 
@@ -90,17 +90,17 @@ python scripts/make_blur_addon_zip.py
 
 | Partition File | Size | Classification | Technical Description |
 | :--- | :--- | :--- | :--- |
-| `boot_permissive.img` | 96 MB | Stock Portov (Patched) | Portov Stock Kernel with `androidboot.selinux=permissive enforcing=0` cmdline |
-| `boot.img` | 96 MB | Portov Untouched | Stock Portov GKI 6.6 Linux Kernel (enforcing backup) |
-| `init_boot.img` | 8 MB | Portov Untouched | 100% Stock Portov GKI Ramdisk |
-| `vendor_boot.img` | 96 MB | Portov Untouched | 100% Stock Portov Recovery Ramdisk & Device Tree |
-| `dtbo.img` | 23 MB | Portov Untouched | 100% Stock Portov Device Tree Blob Overlay |
-| `recovery.img` | 128 MB | Portov Untouched | 100% Stock Portov Recovery Partition |
-| `vbmeta.img` | 8 KB | Portov (AVB Patched) | Stock Portov AVB with flags `0x00000003` (verity & verification disabled) |
-| `vbmeta_system.img` | 4 KB | Portov (AVB Patched) | Stock Portov AVB System with flags `0x00000003` |
-| `vendor.img` | 722 MB | Portov Untouched | 100% Stock Portov hardware HALs (Audio, Camera, Sensors, Display) |
-| `vendor_dlkm.img` | 21.4 MB | Portov Untouched | 100% Stock Portov SM7435/SM6450 kernel driver modules |
-| `system_dlkm.img` | 7.2 MB | Portov Untouched | 100% Stock Portov GKI 6.6 system modules |
+| `boot_permissive.img` | 96 MB | Stock Portov A16 (Patched) | Portov Stock GKI 6.6.118 Kernel with `androidboot.selinux=permissive enforcing=0` cmdline |
+| `boot.img` | 96 MB | Stock Portov A16 | Stock Portov GKI 6.6.118 Linux Kernel (enforcing backup) |
+| `init_boot.img` | 8 MB | Stock Portov A16 | 100% Stock Portov A16 GKI Ramdisk |
+| `vendor_boot.img` | 96 MB | Stock Portov A16 | 100% Stock Portov A16 Recovery Ramdisk, Kernel 6.6.118 Drivers & Device Tree |
+| `dtbo.img` | 23 MB | Stock Portov A16 | 100% Stock Portov A16 Device Tree Blob Overlay |
+| `recovery.img` | 128 MB | Stock Portov A16 | 100% Stock Portov A16 Recovery Partition & FastbootD daemon |
+| `vbmeta.img` | 8 KB | Portov A16 (AVB Patched) | Stock Portov AVB (ARB 12) with flags `0x00000003` (verity & verification disabled) |
+| `vbmeta_system.img` | 4 KB | Portov A16 (AVB Patched) | Stock Portov AVB System (ARB 12) with flags `0x00000003` |
+| `vendor.img` | 722 MB | Stock Portov A16 | 100% Stock Portov A16 hardware HALs (Audio, Camera, Sensors, Display) |
+| `vendor_dlkm.img` | 21.5 MB | Stock Portov A16 | 100% Stock Portov SM7435 kernel driver modules (Kernel 6.6.118) |
+| `system_dlkm.img` | 7.3 MB | Stock Portov A16 | 100% Stock Portov GKI 6.6.118 system modules |
 | `system.img` | 693 MB | Repacked for Port | Android 17 AOSP Framework & Core Services |
 | `system_ext.img` | 549 MB | Repacked for Port | Motorola Hello UI System Extensions (OTA updater stripped) |
 | `product.img` | 3.55 GB | Repacked for Port | Hello UI 17 Apps, Themes, and native Portov Camera5 |

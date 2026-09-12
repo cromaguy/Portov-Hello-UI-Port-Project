@@ -11,19 +11,17 @@ echo ^|                    Moto G67 Power 5G (portov)                    ^|
 echo ^|             Window-Level Native Blurs Manager Add-on             ^|
 echo +------------------------------------------------------------------+
 echo ^|  Android Version : 17                                            ^|
-echo ^|  Security Patch  : August 2025                                   ^|
-echo ^|  Update Channel  : RETIN                                         ^|
-echo +------------------------------------------------------------------+
-echo ^|                        Ported by Anjishnu                        ^|
+echo ^|  Base Firmware   : Android 16 (Universal Global / RETIN cid50)   ^|
+echo ^|  Ported by       : Anjishnu                                      ^|
 echo +------------------------------------------------------------------+
 echo.
 echo =====================================================================
 echo   OPTIONS:
 echo =====================================================================
-echo   [1] Turn ON Window-Level Native Blurs (Enable & Persist)
-echo   [2] Turn OFF / Revert Window-Level Blurs (Restore Stock)
+echo   [1] Turn ON Window-Level Native Blurs (Active)
+echo   [2] Turn OFF Window-Level Native Blurs (Solid / Power Save)
 echo   [3] Check Current Window Blurs Status
-echo   [4] Soft Restart (SurfaceFlinger & SystemUI)
+echo   [4] Soft Restart (SurfaceFlinger ^& SystemUI)
 echo   [5] Full Device Reboot
 echo   [6] Exit
 echo =====================================================================
@@ -54,42 +52,30 @@ if errorlevel 1 (
     goto MENU
 )
 adb wait-for-device
-adb root >nul 2>&1
-timeout /t 1 >nul
 exit /b 0
 
 :ENABLE_BLUR
 call :CHECK_DEVICE
 echo.
-echo [*] Applying Window-Level Native Blur properties...
+echo [*] Enabling Window-Level Native Blurs...
 
-REM Set runtime & persistent props
-adb shell "which resetprop >/dev/null 2>&1 && resetprop ro.surface_flinger.supports_background_blur 1 || setprop ro.surface_flinger.supports_background_blur 1"
-adb shell "which resetprop >/dev/null 2>&1 && resetprop vendor.display.supports_background_blur 1 || setprop vendor.display.supports_background_blur 1"
-adb shell "which resetprop >/dev/null 2>&1 && resetprop ro.launcher.blur.appLaunch 1 || setprop ro.launcher.blur.appLaunch 1"
-adb shell "setprop persist.sys.sf.disable_blurs 0"
+REM Set user/system toggles (works on all devices without root)
 adb shell "settings put global disable_window_blurs 0"
+adb shell "setprop persist.sys.sf.disable_blurs 0"
 
-echo [*] Installing boot persistence scripts...
-REM 1. Magisk / KernelSU module structure
-adb shell "if [ -d /data/adb/modules ]; then mkdir -p /data/adb/modules/native_blurs; echo 'id=native_blurs\nname=Portov Native Window Blurs\nversion=v1.0\nversionCode=1\nauthor=Anjishnu\ndescription=Enables native window and background blurs on Moto G67 Power 5G (portov).' > /data/adb/modules/native_blurs/module.prop; echo 'ro.surface_flinger.supports_background_blur=1\nvendor.display.supports_background_blur=1\nro.launcher.blur.appLaunch=1\npersist.sys.sf.disable_blurs=0\ndebug.sf.signal_protected_for_blur=1' > /data/adb/modules/native_blurs/system.prop; touch /data/adb/modules/native_blurs/auto_mount; fi"
-
-REM 2. post-fs-data.d script (runs before SurfaceFlinger starts)
-adb shell "if [ -d /data/adb ]; then mkdir -p /data/adb/post-fs-data.d; echo '#!/system/bin/sh\nwhich resetprop >/dev/null 2>&1 && resetprop ro.surface_flinger.supports_background_blur 1\nwhich resetprop >/dev/null 2>&1 && resetprop vendor.display.supports_background_blur 1\nwhich resetprop >/dev/null 2>&1 && resetprop ro.launcher.blur.appLaunch 1\nsetprop persist.sys.sf.disable_blurs 0' > /data/adb/post-fs-data.d/99_native_blurs.sh; chmod 755 /data/adb/post-fs-data.d/99_native_blurs.sh; fi"
-
-REM 3. service.d script (late boot settings check)
-adb shell "if [ -d /data/adb ]; then mkdir -p /data/adb/service.d; echo '#!/system/bin/sh\nsleep 3\nsettings put global disable_window_blurs 0' > /data/adb/service.d/99_native_blurs.sh; chmod 755 /data/adb/service.d/99_native_blurs.sh; fi"
+REM If rooted with Magisk/KernelSU, apply resetprop for additional launcher hooks
+adb shell "su -c 'which resetprop >/dev/null 2>&1 && resetprop ro.surface_flinger.supports_background_blur 1 && resetprop vendor.display.supports_background_blur 1 && resetprop ro.launcher.blur.appLaunch 1' >/dev/null 2>&1"
 
 echo.
 echo =====================================================================
-echo [+] Native Window Blurs successfully ENABLED and configured!
+echo [+] Native Window Blurs successfully ENABLED!
 echo =====================================================================
 echo.
 set /p rst="Do you want to soft restart SurfaceFlinger & SystemUI now? (Y/N): "
 if /i "%rst%"=="Y" (
     echo [*] Restarting graphics compositor...
-    adb shell "pkill -f com.android.systemui; stop surfaceflinger; start surfaceflinger"
-    echo [+] UI restarted!
+    adb shell "su -c 'stop surfaceflinger; start surfaceflinger' 2>/dev/null || pkill -f com.android.systemui"
+    echo [+] UI restart triggered!
 )
 pause
 goto MENU
@@ -97,30 +83,22 @@ goto MENU
 :DISABLE_BLUR
 call :CHECK_DEVICE
 echo.
-echo [*] Reverting Window-Level Native Blurs to Stock (OFF)...
+echo [*] Disabling Window-Level Native Blurs (Solid / Power Save mode)...
 
-REM Remove persistence scripts & modules
-adb shell "rm -f /data/adb/post-fs-data.d/99_native_blurs.sh"
-adb shell "rm -f /data/adb/service.d/99_native_blurs.sh"
-adb shell "rm -rf /data/adb/modules/native_blurs"
-
-REM Reset properties to stock
-adb shell "which resetprop >/dev/null 2>&1 && resetprop ro.surface_flinger.supports_background_blur 0 || setprop ro.surface_flinger.supports_background_blur 0"
-adb shell "which resetprop >/dev/null 2>&1 && resetprop vendor.display.supports_background_blur 0 || setprop vendor.display.supports_background_blur 0"
-adb shell "which resetprop >/dev/null 2>&1 && resetprop ro.launcher.blur.appLaunch 0 || setprop ro.launcher.blur.appLaunch 0"
-adb shell "setprop persist.sys.sf.disable_blurs 1"
 adb shell "settings put global disable_window_blurs 1"
+adb shell "setprop persist.sys.sf.disable_blurs 1"
+adb shell "su -c 'which resetprop >/dev/null 2>&1 && resetprop ro.launcher.blur.appLaunch 0' >/dev/null 2>&1"
 
 echo.
 echo =====================================================================
-echo [+] Native Window Blurs successfully REVERTED to stock (Disabled)!
+echo [+] Native Window Blurs successfully DISABLED (Solid / Stock styling)!
 echo =====================================================================
 echo.
 set /p rst="Do you want to soft restart SurfaceFlinger & SystemUI now? (Y/N): "
 if /i "%rst%"=="Y" (
     echo [*] Restarting graphics compositor...
-    adb shell "pkill -f com.android.systemui; stop surfaceflinger; start surfaceflinger"
-    echo [+] UI restarted!
+    adb shell "su -c 'stop surfaceflinger; start surfaceflinger' 2>/dev/null || pkill -f com.android.systemui"
+    echo [+] UI restart triggered!
 )
 pause
 goto MENU
@@ -131,18 +109,14 @@ echo.
 echo =====================================================================
 echo   CURRENT WINDOW BLUR STATUS:
 echo =====================================================================
-echo [*] ro.surface_flinger.supports_background_blur:
+echo [*] Hardware Capability (ro.surface_flinger.supports_background_blur):
 adb shell getprop ro.surface_flinger.supports_background_blur
-echo [*] vendor.display.supports_background_blur:
-adb shell getprop vendor.display.supports_background_blur
-echo [*] persist.sys.sf.disable_blurs:
-adb shell getprop persist.sys.sf.disable_blurs
-echo [*] ro.launcher.blur.appLaunch:
-adb shell getprop ro.launcher.blur.appLaunch
-echo [*] Global settings disable_window_blurs:
+echo [*] Global Window Blurs Setting (0=Active, 1=Disabled):
 adb shell settings get global disable_window_blurs
-echo [*] Persistence Script Check:
-adb shell "if [ -f /data/adb/post-fs-data.d/99_native_blurs.sh ]; then echo '    Persistence: Active (/data/adb/post-fs-data.d/99_native_blurs.sh)'; else echo '    Persistence: Not Installed'; fi"
+echo [*] SurfaceFlinger Blur Persistence (0=Active, 1=Disabled):
+adb shell getprop persist.sys.sf.disable_blurs
+echo [*] Launcher App Launch Blur (ro.launcher.blur.appLaunch):
+adb shell getprop ro.launcher.blur.appLaunch
 echo =====================================================================
 echo.
 pause
@@ -152,7 +126,7 @@ goto MENU
 call :CHECK_DEVICE
 echo.
 echo [*] Restarting SurfaceFlinger and SystemUI...
-adb shell "pkill -f com.android.systemui; stop surfaceflinger; start surfaceflinger"
+adb shell "su -c 'stop surfaceflinger; start surfaceflinger' 2>/dev/null || pkill -f com.android.systemui"
 echo [+] Done!
 pause
 goto MENU

@@ -7,8 +7,8 @@ echo ^|                    Moto G67 Power 5G (portov)                    ^|
 echo ^|                     HelloUI Fastboot Flasher                     ^|
 echo +------------------------------------------------------------------+
 echo ^|  Android Version : 17                                            ^|
-echo ^|  Security Patch  : August 2025                                   ^|
-echo ^|  Update Channel  : RETIN                                         ^|
+echo ^|  Base Firmware   : Android 16 (W1VTS36H.22-20-3-2-4 / cid50)      ^|
+echo ^|  Update Channel  : Global Retail / RETIN (Universal)              ^|
 echo +------------------------------------------------------------------+
 echo ^|                        Ported by Anjishnu                        ^|
 echo +------------------------------------------------------------------+
@@ -16,7 +16,7 @@ echo.
 echo [WARNING] DO NOT RUN THIS SCRIPT UNLESS:
 echo   1. Your bootloader is UNLOCKED (fastboot oem unlock).
 echo   2. You have a full backup of your personal data.
-echo   3. You have Motorola Rescue and Smart Assistant (RSA) installed on PC.
+echo   3. You have Software Fix installed on PC.
 echo.
 echo Press Ctrl+C to cancel, or
 pause

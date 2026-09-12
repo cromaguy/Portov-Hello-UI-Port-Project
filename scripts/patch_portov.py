@@ -135,7 +135,7 @@ for line in lines:
     else:
         new_lines.append(line)
 
-# Add custom build properties for About Phone visibility
+# Add custom build properties for About Phone visibility and Native Window Blurs
 branding_props = '''
 # -------------------------------------------------------------
 # Portov Custom ROM Properties - Ported by Anjishnu
@@ -149,6 +149,13 @@ ro.custom.porter=Anjishnu
 ro.product.model=moto g67 power 5G
 ro.product.device=portov
 ro.product.name=portov_g
+
+# Native Window-Level Background Blurs
+ro.surface_flinger.supports_background_blur=1
+vendor.display.supports_background_blur=1
+ro.launcher.blur.appLaunch=1
+persist.sys.sf.disable_blurs=0
+debug.sf.signal_protected_for_blur=1
 '''
 new_lines.append(branding_props)
 
