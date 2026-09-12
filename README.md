@@ -76,16 +76,6 @@ python scripts/make_blur_addon_zip.py
 
 ---
 
-## 📥 Downloads
-
-| Package Name | Target Interface | File Size | Download Link |
-| :--- | :--- | :--- | :--- |
-| **Port Package (Fastboot)** | PC / Fastboot & FastbootD | ~5.7 GB | [Google Drive](https://drive.google.com/file/d/1i6MvSgaoAqQNo3DilyvF5gp3e4DmTPqi/view?usp=sharing) |
-| **SELinux Permissive Flasher** | PC / Fastboot (`flash_permissive_boot`) | 96 MB | Included in Port Package (`boot_permissive.img`) |
-| **Window-Level Native Blurs Add-on** | ADB / PC (Windows & Linux) | ~5.2 KB | Included in repository (`addons/window_blurs`) |
-
----
-
 ## 📦 Package Architecture & Partition Breakdown
 
 | Partition File | Size | Classification | Technical Description |
